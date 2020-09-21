@@ -28,8 +28,8 @@ public:
     PageElement(std::string title);
 
     virtual void GetHTML(std::ostringstream &stream) = 0;
-    virtual std::string GetJavaCommandFunction() = 0;
-    virtual std::string GetJavaOnMessageStatment() = 0;
+    virtual void GetJavaCommandFunction(std::ostringstream &stream) = 0;
+    virtual void GetJavaOnMessageStatment(std::ostringstream &stream) = 0;
     virtual std::string GetSocketMessage() = 0;
     virtual bool ProcessSocketMessage(std::string message) = 0;
     virtual void InitializeData(EEPROM_Data data) = 0;
@@ -45,8 +45,8 @@ public:
     Control_Toggle(std::string title, uint8_t *controlVar);
 
     void GetHTML(std::ostringstream &stream) override;
-    std::string GetJavaCommandFunction() override;
-    std::string GetJavaOnMessageStatment() override;
+    void GetJavaCommandFunction(std::ostringstream &stream) override;
+    void GetJavaOnMessageStatment(std::ostringstream &stream) override;
     std::string GetSocketMessage() override;
     bool ProcessSocketMessage(std::string message) override;
     void InitializeData(EEPROM_Data data) override;
@@ -63,8 +63,8 @@ public:
     Control_Slider(std::string title, uint8_t *controlVar, uint8_t max);
 
     void GetHTML(std::ostringstream &stream) override;
-    std::string GetJavaCommandFunction() override;
-    std::string GetJavaOnMessageStatment() override;
+    void GetJavaCommandFunction(std::ostringstream &stream) override;
+    void GetJavaOnMessageStatment(std::ostringstream &stream) override;
     std::string GetSocketMessage() override;
     bool ProcessSocketMessage(std::string message) override;
     void InitializeData(EEPROM_Data data) override;
@@ -80,8 +80,8 @@ public:
     Control_DropDown(std::string title, uint8_t *controlVar);
 
     void GetHTML(std::ostringstream &stream) override;
-    std::string GetJavaCommandFunction() override;
-    std::string GetJavaOnMessageStatment() override;
+    void GetJavaCommandFunction(std::ostringstream &stream) override;
+    void GetJavaOnMessageStatment(std::ostringstream &stream) override;
     std::string GetSocketMessage() override;
     bool ProcessSocketMessage(std::string message) override;
     void AddSelection(std::string selectionName);
@@ -97,8 +97,8 @@ public:
     Control_ColorPicker(std::string title, uint8_t *red, uint8_t *green, uint8_t *blue);
 
     void GetHTML(std::ostringstream &stream) override;
-    std::string GetJavaCommandFunction() override;
-    std::string GetJavaOnMessageStatment() override;
+    void GetJavaCommandFunction(std::ostringstream &stream) override;
+    void GetJavaOnMessageStatment(std::ostringstream &stream) override;
     std::string GetSocketMessage() override;
     bool ProcessSocketMessage(std::string message) override;
     void InitializeData(EEPROM_Data data) override;
@@ -112,7 +112,11 @@ private:
 public:
     Display_Text(std::string title, std::string *data);
     void GetHTML(std::ostringstream &stream) override;
-    //std::string GetHTML() override;
+    void GetJavaCommandFunction(std::ostringstream &stream) override;
+    void GetJavaOnMessageStatment(std::ostringstream &stream) override;
+    std::string GetSocketMessage() override;
+    bool ProcessSocketMessage(std::string message) override;
+    void InitializeData(EEPROM_Data data) override;
 };
 
 #endif

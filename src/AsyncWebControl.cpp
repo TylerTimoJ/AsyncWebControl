@@ -26,11 +26,11 @@ void AsyncWebControl::GetNavBarHTML(std::ostringstream &stream)
 {
   //std::ostringstream stream;
 
-  stream << "<!doctype html>\n<html lang=en dir=ltr>\n<head>\n<meta charset=utf-8>\n<meta name=viewport content=\"width=device-width, initial-scale=1\">\n<title>"
+  stream << "<!doctype html>\n<html lang=\"en\" dir=\"ltr\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>"
          << m_title
-         << "</title>\n<link href=style.css rel=stylesheet type=text/css>\n</head>\n<body>\n<nav>\n<input class=menuCheck type=checkbox id=menuCheck>\n<label for=menuCheck class=checkbtn>&#9776;</label>\n<label class=logo>"
+         << "</title>\n<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">\n</head>\n<body>\n<nav>\n<input class=\"menuCheck\" type=\"checkbox\" id=\"menuCheck\">\n<label for=\"menuCheck\" class=\"checkbtn\">&#9776;</label>\n<label class=\"logo\">"
          << m_title
-         << "</label>\n<ul>\n<li><a class=active href=/>Home</a></li>\n<li><a href=/update>Update</a></li>\n<li><a href=/about>About</a></li>\n</ul>\n</nav>\n<div class=main>\n";
+         << "</label>\n<ul>\n<li><a class=\"active\" href=\"/\">Home</a></li>\n<li><a href=\"/update\">Update</a></li>\n<li><a href=\"/about\">About</a></li>\n</ul>\n</nav>\n<div class=\"main\">\n";
   //return stream.str();
 }
 
@@ -121,21 +121,22 @@ std::string AsyncWebControl::GetFullJavaScript()
   //else ifs
   for (int i = 0; i < PageControls.size(); i++)
   {
-    stream << PageControls[i]->GetJavaOnMessageStatment() << "\n";
+    PageControls[i]->GetJavaOnMessageStatment(stream);
+    //stream << PageControls[i]->GetJavaOnMessageStatment() << "\n";
   }
 
   stream << "}\n";
   // change and click functions
   for (int i = 0; i < PageControls.size(); i++)
   {
-    stream << PageControls[i]->GetJavaCommandFunction() << "\n";
+    PageControls[i]->GetJavaCommandFunction(stream);
+    //stream << PageControls[i]->GetJavaCommandFunction() << "\n";
   }
 
   //close tag
   stream << "</script>\n";
   return stream.str();
 }
-
 
 void AsyncWebControl::onIndexRequest(AsyncWebServerRequest *request)
 {
@@ -211,12 +212,6 @@ void AsyncWebControl::handleDoUpdate(AsyncWebServerRequest *request, const Strin
 void AsyncWebControl::printProgress(size_t prg, size_t sz)
 {
   Serial.printf("Progress: %d%%\n", (prg * 100) / content_len);
-}
-
-
-void AsyncWebControl::UpdateClients()
-{
-  SendAllWSData();
 }
 
 void AsyncWebControl::SendAllWSData()
@@ -383,4 +378,9 @@ void AsyncWebControl::Loop()
     EEPROM.commit();
     EEPROMChanged = false;
   }
+}
+
+void AsyncWebControl::UpdateElement(PageElement &element)
+{
+  SendMessageToAll(element.GetSocketMessage());
 }

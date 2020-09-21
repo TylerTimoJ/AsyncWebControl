@@ -51,7 +51,7 @@ public:
 
     void BeginServer();
 
-    void UpdateClients();
+    void UpdateElement(PageElement &element);
 
     void Add(PageElement &element);
 

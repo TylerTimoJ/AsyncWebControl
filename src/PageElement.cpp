@@ -22,9 +22,8 @@ Control_Toggle::Control_Toggle(std::string title, uint8_t *controlVar)
 {
 }
 
-void Control_Toggle::GetHTML(std::ostringstream& stream)
+void Control_Toggle::GetHTML(std::ostringstream &stream)
 {
-    //std::ostringstream stream;
     stream << "<h1>"
            << m_title
            << "</h1>\n<label class=\"switch\">\n<input type=\"checkbox\" id=\""
@@ -32,29 +31,23 @@ void Control_Toggle::GetHTML(std::ostringstream& stream)
            << "\" onClick=\""
            << m_ID
            << "Clicked()\">\n<span class=\"slider round\"> </span> </label>\n";
-    //return stream.str();
 }
 
-std::string Control_Toggle::GetJavaCommandFunction()
+void Control_Toggle::GetJavaCommandFunction(std::ostringstream &stream)
 {
-    std::ostringstream stream;
     stream << "function "
            << m_ID
            << "Clicked() { doSend(\""
            << m_ID
            << "\" + \"=\" + ~~(VAR_"
            << m_ID
-           << ".checked)); }";
-    return stream.str();
+           << ".checked)); }\n";
 }
-
-std::string Control_Toggle::GetJavaOnMessageStatment()
+void Control_Toggle::GetJavaOnMessageStatment(std::ostringstream &stream)
 {
-    std::ostringstream stream;
     stream << "else if (evt.data.substring(0, 8) == \"" << m_ID << "\") { VAR_"
            << m_ID
-           << ".checked = parseInt(evt.data.substr(9)); } ";
-    return stream.str();
+           << ".checked = parseInt(evt.data.substr(9)); }\n";
 }
 
 std::string Control_Toggle::GetSocketMessage()
@@ -93,9 +86,8 @@ Control_Slider::Control_Slider(std::string title, uint8_t *controlVar, uint8_t m
 {
 }
 
-void Control_Slider::GetHTML(std::ostringstream& stream)
+void Control_Slider::GetHTML(std::ostringstream &stream)
 {
-    //std::ostringstream stream;
     stream << "<h1 id=\""
            << m_ID
            << "_label\">"
@@ -107,29 +99,21 @@ void Control_Slider::GetHTML(std::ostringstream& stream)
            << "\" value=\"255\" onChange=\""
            << m_ID
            << "Changed()\">\n";
-
-    //return stream.str();
-    //sprintf()
 }
 
-std::string Control_Slider::GetJavaCommandFunction()
+void Control_Slider::GetJavaCommandFunction(std::ostringstream &stream)
 {
-    std::ostringstream stream;
-
     stream << "function "
            << m_ID
            << "Changed() { doSend(\""
            << m_ID
            << "\" + \"=\" + VAR_"
            << m_ID
-           << ".value); }";
-
-    return stream.str();
+           << ".value); }\n";
 }
 
-std::string Control_Slider::GetJavaOnMessageStatment()
+void Control_Slider::GetJavaOnMessageStatment(std::ostringstream &stream)
 {
-    std::ostringstream stream;
     stream << "else if (evt.data.substring(0, 8) == \""
            << m_ID
            << "\") { VAR_"
@@ -142,8 +126,7 @@ std::string Control_Slider::GetJavaOnMessageStatment()
            << m_ID
            << ".value / VAR_"
            << m_ID
-           << ".max) * 100)) + \"%\"; }";
-    return stream.str();
+           << ".max) * 100)) + \"%\"; }\n";
 }
 
 std::string Control_Slider::GetSocketMessage()
@@ -180,10 +163,8 @@ Control_DropDown::Control_DropDown(std::string title, uint8_t *controlVar)
 {
 }
 
-void Control_DropDown::GetHTML(std::ostringstream& stream)
+void Control_DropDown::GetHTML(std::ostringstream &stream)
 {
-    //std::ostringstream stream;
-
     stream << "<h1>"
            << m_title
            << "</h1>\n<div class=\"box\">\n<select id=\""
@@ -202,32 +183,26 @@ void Control_DropDown::GetHTML(std::ostringstream& stream)
     }
 
     stream << "</select>\n</div>\n";
-    //return stream.str();
 }
 
-std::string Control_DropDown::GetJavaCommandFunction()
+void Control_DropDown::GetJavaCommandFunction(std::ostringstream &stream)
 {
-    std::ostringstream stream;
     stream << "function "
            << m_ID
            << "Changed() { doSend(\""
            << m_ID
            << "\" + \"=\" + VAR_"
            << m_ID
-           << ".value); }"; // document.getElementById(\"" << m_ID << "_label\").innerHTML = \"" << m_title << " \" + Math.round(((" << m_ID << ".value / " << (int)m_max << ") * 100)) + \"%\";
-
-    return stream.str();
+           << ".value); }\n"; // document.getElementById(\"" << m_ID << "_label\").innerHTML = \"" << m_title << " \" + Math.round(((" << m_ID << ".value / " << (int)m_max << ") * 100)) + \"%\";
 }
 
-std::string Control_DropDown::GetJavaOnMessageStatment()
+void Control_DropDown::GetJavaOnMessageStatment(std::ostringstream &stream)
 {
-    std::ostringstream stream;
     stream << "else if (evt.data.substring(0, 8) == \""
            << m_ID
            << "\") { VAR_"
            << m_ID
-           << ".value = parseInt(evt.data.substr(9)); }";
-    return stream.str();
+           << ".value = parseInt(evt.data.substr(9)); }\n";
 }
 
 std::string Control_DropDown::GetSocketMessage()
@@ -268,7 +243,7 @@ Control_ColorPicker::Control_ColorPicker(std::string title, uint8_t *red, uint8_
 {
 }
 
-void Control_ColorPicker::GetHTML(std::ostringstream& stream)
+void Control_ColorPicker::GetHTML(std::ostringstream &stream)
 {
     //std::ostringstream stream;
     stream << "<h1>"
@@ -278,32 +253,27 @@ void Control_ColorPicker::GetHTML(std::ostringstream& stream)
            << "\" value=\"#000000\" onChange=\""
            << m_ID
            << "Changed()\"/>\n";
-   // return stream.str();
+    // return stream.str();
 }
 
-std::string Control_ColorPicker::GetJavaCommandFunction()
+void Control_ColorPicker::GetJavaCommandFunction(std::ostringstream &stream)
 {
-    std::ostringstream stream;
     stream << "function "
            << m_ID
            << "Changed() { doSend(\""
            << m_ID
            << "\" + \"=\" + VAR_"
            << m_ID
-           << ".value); }"; // document.getElementById(\"" << m_ID << "_label\").innerHTML = \"" << m_title << " \" + Math.round(((" << m_ID << ".value / " << (int)m_max << ") * 100)) + \"%\";
-
-    return stream.str();
+           << ".value); }\n"; // document.getElementById(\"" << m_ID << "_label\").innerHTML = \"" << m_title << " \" + Math.round(((" << m_ID << ".value / " << (int)m_max << ") * 100)) + \"%\";
 }
 
-std::string Control_ColorPicker::GetJavaOnMessageStatment()
+void Control_ColorPicker::GetJavaOnMessageStatment(std::ostringstream &stream)
 {
-    std::ostringstream stream;
     stream << "else if (evt.data.substring(0, 8) == \""
            << m_ID
            << "\") { VAR_"
            << m_ID
-           << ".value = evt.data.substr(9); }";
-    return stream.str();
+           << ".value = evt.data.substr(9); }\n";
 }
 
 std::string Control_ColorPicker::GetSocketMessage()
@@ -352,3 +322,54 @@ void Control_ColorPicker::InitializeData(EEPROM_Data data)
     *m_dataGreen = data.data[1];
     *m_dataBlue = data.data[2];
 }
+
+Display_Text::Display_Text(std::string title, std::string *data)
+    : PageElement{title}, m_data(data)
+{
+}
+
+void Display_Text::GetHTML(std::ostringstream &stream)
+{
+    stream << "<h1>"
+           << m_title
+           << "</h1>\n<h2 id=\""
+           << m_ID
+           << "\">"
+           << *m_data
+           << "</h2>\n";
+}
+
+void Display_Text::GetJavaCommandFunction(std::ostringstream &stream)
+{
+    stream << "\n";
+}
+
+void Display_Text::GetJavaOnMessageStatment(std::ostringstream &stream)
+{
+    stream << "else if (evt.data.substring(0, 8) == \""
+           << m_ID
+           << "\") { VAR_"
+           << m_ID
+           << ".innerHTML  = evt.data.substr(9); }\n";
+}
+
+std::string Display_Text::GetSocketMessage()
+{
+    std::ostringstream stream;
+    stream << m_ID
+           << "="
+           << *m_data;
+    return stream.str();
+}
+
+bool Display_Text::ProcessSocketMessage(std::string message)
+{
+    if (message.find(m_ID) != std::string::npos)
+    {
+        *m_data = message.erase(0, 9);
+        return true;
+    }
+    return false;
+}
+
+void Display_Text::InitializeData(EEPROM_Data data) {}
