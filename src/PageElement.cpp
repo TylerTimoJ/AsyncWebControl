@@ -15,14 +15,14 @@ PageElement::EEPROM_Data PageElement::GetEEPROMData()
     return m_EEPROM_Packtet;
 }
 
-//**************************_________ ToggleControl _________**************************
+//**************************_________ Toggle Input _________**************************
 
-Control_Toggle::Control_Toggle(std::string title, uint8_t *controlVar)
+Input_Toggle::Input_Toggle(std::string title, uint8_t *controlVar)
     : PageElement{title}, m_data(controlVar)
 {
 }
 
-void Control_Toggle::GetHTML(std::ostringstream &stream)
+void Input_Toggle::GetHTML(std::ostringstream &stream)
 {
     stream << "<h1>"
            << m_title
@@ -33,7 +33,7 @@ void Control_Toggle::GetHTML(std::ostringstream &stream)
            << "Clicked()\">\n<span class=\"slider round\"> </span> </label>\n";
 }
 
-void Control_Toggle::GetJavaCommandFunction(std::ostringstream &stream)
+void Input_Toggle::GetJavaCommandFunction(std::ostringstream &stream)
 {
     stream << "function "
            << m_ID
@@ -43,14 +43,14 @@ void Control_Toggle::GetJavaCommandFunction(std::ostringstream &stream)
            << m_ID
            << ".checked)); }\n";
 }
-void Control_Toggle::GetJavaOnMessageStatment(std::ostringstream &stream)
+void Input_Toggle::GetJavaOnMessageStatment(std::ostringstream &stream)
 {
     stream << "else if (evt.data.substring(0, 8) == \"" << m_ID << "\") { VAR_"
            << m_ID
            << ".checked = parseInt(evt.data.substr(9)); }\n";
 }
 
-std::string Control_Toggle::GetSocketMessage()
+std::string Input_Toggle::GetSocketMessage()
 {
     std::ostringstream stream;
     stream << m_ID
@@ -60,7 +60,7 @@ std::string Control_Toggle::GetSocketMessage()
     return stream.str();
 }
 
-bool Control_Toggle::ProcessSocketMessage(std::string message)
+bool Input_Toggle::ProcessSocketMessage(std::string message)
 {
     if (message.find(m_ID) != std::string::npos)
     {
@@ -73,20 +73,20 @@ bool Control_Toggle::ProcessSocketMessage(std::string message)
     return false;
 }
 
-void Control_Toggle::InitializeData(EEPROM_Data data)
+void Input_Toggle::InitializeData(EEPROM_Data data)
 {
     m_EEPROM_Packtet = data;
     *m_data = data.data[0];
 }
 
-//**************************_________ SliderControl _________**************************
+//**************************_________ Slider Input _________**************************
 
-Control_Slider::Control_Slider(std::string title, uint8_t *controlVar, uint8_t max)
+Input_Slider::Input_Slider(std::string title, uint8_t *controlVar, uint8_t max)
     : PageElement{title}, m_data(controlVar), m_max(max)
 {
 }
 
-void Control_Slider::GetHTML(std::ostringstream &stream)
+void Input_Slider::GetHTML(std::ostringstream &stream)
 {
     stream << "<h1 id=\""
            << m_ID
@@ -101,7 +101,7 @@ void Control_Slider::GetHTML(std::ostringstream &stream)
            << "Changed()\">\n";
 }
 
-void Control_Slider::GetJavaCommandFunction(std::ostringstream &stream)
+void Input_Slider::GetJavaCommandFunction(std::ostringstream &stream)
 {
     stream << "function "
            << m_ID
@@ -112,7 +112,7 @@ void Control_Slider::GetJavaCommandFunction(std::ostringstream &stream)
            << ".value); }\n";
 }
 
-void Control_Slider::GetJavaOnMessageStatment(std::ostringstream &stream)
+void Input_Slider::GetJavaOnMessageStatment(std::ostringstream &stream)
 {
     stream << "else if (evt.data.substring(0, 8) == \""
            << m_ID
@@ -129,7 +129,7 @@ void Control_Slider::GetJavaOnMessageStatment(std::ostringstream &stream)
            << ".max) * 100)) + \"%\"; }\n";
 }
 
-std::string Control_Slider::GetSocketMessage()
+std::string Input_Slider::GetSocketMessage()
 {
     std::ostringstream stream;
     stream << m_ID
@@ -138,7 +138,7 @@ std::string Control_Slider::GetSocketMessage()
     return stream.str();
 }
 
-bool Control_Slider::ProcessSocketMessage(std::string message)
+bool Input_Slider::ProcessSocketMessage(std::string message)
 {
     if (message.find(m_ID) != std::string::npos)
     {
@@ -150,20 +150,20 @@ bool Control_Slider::ProcessSocketMessage(std::string message)
     return false;
 }
 
-void Control_Slider::InitializeData(EEPROM_Data data)
+void Input_Slider::InitializeData(EEPROM_Data data)
 {
     m_EEPROM_Packtet = data;
     *m_data = data.data[0];
 }
 
-//**************************_________ DropDownControl _________**************************
+//**************************_________ Dropdown Input _________**************************
 
-Control_DropDown::Control_DropDown(std::string title, uint8_t *controlVar)
+Input_DropDown::Input_DropDown(std::string title, uint8_t *controlVar)
     : PageElement{title}, m_data(controlVar)
 {
 }
 
-void Control_DropDown::GetHTML(std::ostringstream &stream)
+void Input_DropDown::GetHTML(std::ostringstream &stream)
 {
     stream << "<h1>"
            << m_title
@@ -185,7 +185,7 @@ void Control_DropDown::GetHTML(std::ostringstream &stream)
     stream << "</select>\n</div>\n";
 }
 
-void Control_DropDown::GetJavaCommandFunction(std::ostringstream &stream)
+void Input_DropDown::GetJavaCommandFunction(std::ostringstream &stream)
 {
     stream << "function "
            << m_ID
@@ -193,10 +193,10 @@ void Control_DropDown::GetJavaCommandFunction(std::ostringstream &stream)
            << m_ID
            << "\" + \"=\" + VAR_"
            << m_ID
-           << ".value); }\n"; // document.getElementById(\"" << m_ID << "_label\").innerHTML = \"" << m_title << " \" + Math.round(((" << m_ID << ".value / " << (int)m_max << ") * 100)) + \"%\";
+           << ".value); }\n";
 }
 
-void Control_DropDown::GetJavaOnMessageStatment(std::ostringstream &stream)
+void Input_DropDown::GetJavaOnMessageStatment(std::ostringstream &stream)
 {
     stream << "else if (evt.data.substring(0, 8) == \""
            << m_ID
@@ -205,14 +205,16 @@ void Control_DropDown::GetJavaOnMessageStatment(std::ostringstream &stream)
            << ".value = parseInt(evt.data.substr(9)); }\n";
 }
 
-std::string Control_DropDown::GetSocketMessage()
+std::string Input_DropDown::GetSocketMessage()
 {
     std::ostringstream stream;
-    stream << m_ID << "=" << (int)(*m_data);
+    stream << m_ID
+           << "="
+           << (int)(*m_data);
     return stream.str();
 }
 
-bool Control_DropDown::ProcessSocketMessage(std::string message)
+bool Input_DropDown::ProcessSocketMessage(std::string message)
 {
     if (message.find(m_ID) != std::string::npos)
     {
@@ -225,27 +227,26 @@ bool Control_DropDown::ProcessSocketMessage(std::string message)
     return false;
 }
 
-void Control_DropDown::AddSelection(std::string selectionName)
+void Input_DropDown::AddSelection(std::string selectionName)
 {
     m_Selections.push_back(std::string(selectionName));
 }
 
-void Control_DropDown::InitializeData(EEPROM_Data data)
+void Input_DropDown::InitializeData(EEPROM_Data data)
 {
     m_EEPROM_Packtet = data;
     *m_data = data.data[0];
 }
 
-//**************************_________ ColorSelectControl _________**************************
+//**************************_________ Color Picker Input _________**************************
 
-Control_ColorPicker::Control_ColorPicker(std::string title, uint8_t *red, uint8_t *green, uint8_t *blue)
+Input_ColorPicker::Input_ColorPicker(std::string title, uint8_t *red, uint8_t *green, uint8_t *blue)
     : PageElement{title}, m_dataRed(red), m_dataGreen(green), m_dataBlue(blue)
 {
 }
 
-void Control_ColorPicker::GetHTML(std::ostringstream &stream)
+void Input_ColorPicker::GetHTML(std::ostringstream &stream)
 {
-    //std::ostringstream stream;
     stream << "<h1>"
            << m_title
            << "</h1>\n<input type=\"color\" id=\""
@@ -253,10 +254,9 @@ void Control_ColorPicker::GetHTML(std::ostringstream &stream)
            << "\" value=\"#000000\" onChange=\""
            << m_ID
            << "Changed()\"/>\n";
-    // return stream.str();
 }
 
-void Control_ColorPicker::GetJavaCommandFunction(std::ostringstream &stream)
+void Input_ColorPicker::GetJavaCommandFunction(std::ostringstream &stream)
 {
     stream << "function "
            << m_ID
@@ -264,10 +264,10 @@ void Control_ColorPicker::GetJavaCommandFunction(std::ostringstream &stream)
            << m_ID
            << "\" + \"=\" + VAR_"
            << m_ID
-           << ".value); }\n"; // document.getElementById(\"" << m_ID << "_label\").innerHTML = \"" << m_title << " \" + Math.round(((" << m_ID << ".value / " << (int)m_max << ") * 100)) + \"%\";
+           << ".value); }\n";
 }
 
-void Control_ColorPicker::GetJavaOnMessageStatment(std::ostringstream &stream)
+void Input_ColorPicker::GetJavaOnMessageStatment(std::ostringstream &stream)
 {
     stream << "else if (evt.data.substring(0, 8) == \""
            << m_ID
@@ -276,7 +276,7 @@ void Control_ColorPicker::GetJavaOnMessageStatment(std::ostringstream &stream)
            << ".value = evt.data.substr(9); }\n";
 }
 
-std::string Control_ColorPicker::GetSocketMessage()
+std::string Input_ColorPicker::GetSocketMessage()
 {
     std::ostringstream stream;
 
@@ -293,7 +293,7 @@ std::string Control_ColorPicker::GetSocketMessage()
     return stream.str();
 }
 
-bool Control_ColorPicker::ProcessSocketMessage(std::string message)
+bool Input_ColorPicker::ProcessSocketMessage(std::string message)
 {
     if (message.find(m_ID) != std::string::npos)
     {
@@ -315,7 +315,7 @@ bool Control_ColorPicker::ProcessSocketMessage(std::string message)
     return false;
 }
 
-void Control_ColorPicker::InitializeData(EEPROM_Data data)
+void Input_ColorPicker::InitializeData(EEPROM_Data data)
 {
     m_EEPROM_Packtet = data;
     *m_dataRed = data.data[0];
@@ -323,12 +323,73 @@ void Control_ColorPicker::InitializeData(EEPROM_Data data)
     *m_dataBlue = data.data[2];
 }
 
-Display_Text::Display_Text(std::string title, std::string *data)
+//**************************_________ Text Input _________**************************
+
+Input_Text::Input_Text(std::string title, std::string *data)
     : PageElement{title}, m_data(data)
 {
 }
 
-void Display_Text::GetHTML(std::ostringstream &stream)
+void Input_Text::GetHTML(std::ostringstream &stream)
+{
+    stream << "<h1>"
+           << m_title
+           << "</h1>\n<textarea id=\""
+           << m_ID
+           << "\" rows=\"4\" style=\"font-size: 18pt\" onChange=\""
+           << m_ID
+           << "Changed()\"> </textarea>\n";
+}
+
+void Input_Text::GetJavaCommandFunction(std::ostringstream &stream)
+{
+    stream << "function "
+           << m_ID
+           << "Changed() { doSend(\""
+           << m_ID
+           << "\" + \"=\" + VAR_"
+           << m_ID
+           << ".value); }\n";
+}
+
+void Input_Text::GetJavaOnMessageStatment(std::ostringstream &stream)
+{
+    stream << "else if (evt.data.substring(0, 8) == \""
+           << m_ID
+           << "\") { VAR_"
+           << m_ID
+           << ".value = evt.data.substr(9); }\n";
+}
+
+std::string Input_Text::GetSocketMessage()
+{
+    std::ostringstream stream;
+    stream << m_ID
+           << "="
+           << *m_data;
+    return stream.str();
+}
+
+bool Input_Text::ProcessSocketMessage(std::string message)
+{
+    if (message.find(m_ID) != std::string::npos)
+    {
+        *m_data = message.erase(0, 9);
+        return true;
+    }
+    return false;
+}
+
+void Input_Text::InitializeData(EEPROM_Data data) {}
+
+//**************************_________ Text Output _________**************************
+
+Output_Text::Output_Text(std::string title, std::string *data)
+    : PageElement{title}, m_data(data)
+{
+}
+
+void Output_Text::GetHTML(std::ostringstream &stream)
 {
     stream << "<h1>"
            << m_title
@@ -339,12 +400,12 @@ void Display_Text::GetHTML(std::ostringstream &stream)
            << "</h2>\n";
 }
 
-void Display_Text::GetJavaCommandFunction(std::ostringstream &stream)
+void Output_Text::GetJavaCommandFunction(std::ostringstream &stream)
 {
     stream << "\n";
 }
 
-void Display_Text::GetJavaOnMessageStatment(std::ostringstream &stream)
+void Output_Text::GetJavaOnMessageStatment(std::ostringstream &stream)
 {
     stream << "else if (evt.data.substring(0, 8) == \""
            << m_ID
@@ -353,7 +414,7 @@ void Display_Text::GetJavaOnMessageStatment(std::ostringstream &stream)
            << ".innerHTML  = evt.data.substr(9); }\n";
 }
 
-std::string Display_Text::GetSocketMessage()
+std::string Output_Text::GetSocketMessage()
 {
     std::ostringstream stream;
     stream << m_ID
@@ -362,7 +423,7 @@ std::string Display_Text::GetSocketMessage()
     return stream.str();
 }
 
-bool Display_Text::ProcessSocketMessage(std::string message)
+bool Output_Text::ProcessSocketMessage(std::string message)
 {
     if (message.find(m_ID) != std::string::npos)
     {
@@ -372,4 +433,4 @@ bool Display_Text::ProcessSocketMessage(std::string message)
     return false;
 }
 
-void Display_Text::InitializeData(EEPROM_Data data) {}
+void Output_Text::InitializeData(EEPROM_Data data) {}

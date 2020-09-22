@@ -36,13 +36,13 @@ public:
     virtual EEPROM_Data GetEEPROMData();
 };
 
-class Control_Toggle : public PageElement
+class Input_Toggle : public PageElement
 {
 private:
     uint8_t *m_data;
 
 public:
-    Control_Toggle(std::string title, uint8_t *controlVar);
+    Input_Toggle(std::string title, uint8_t *controlVar);
 
     void GetHTML(std::ostringstream &stream) override;
     void GetJavaCommandFunction(std::ostringstream &stream) override;
@@ -53,14 +53,14 @@ public:
     //EEPROM_Data GetEEPROMData() override;
 };
 
-class Control_Slider : public PageElement
+class Input_Slider : public PageElement
 {
 private:
     uint8_t *m_data;
     uint8_t m_max;
 
 public:
-    Control_Slider(std::string title, uint8_t *controlVar, uint8_t max);
+    Input_Slider(std::string title, uint8_t *controlVar, uint8_t max);
 
     void GetHTML(std::ostringstream &stream) override;
     void GetJavaCommandFunction(std::ostringstream &stream) override;
@@ -70,14 +70,14 @@ public:
     void InitializeData(EEPROM_Data data) override;
 };
 
-class Control_DropDown : public PageElement
+class Input_DropDown : public PageElement
 {
 private:
     std::vector<std::string> m_Selections;
     uint8_t *m_data;
 
 public:
-    Control_DropDown(std::string title, uint8_t *controlVar);
+    Input_DropDown(std::string title, uint8_t *controlVar);
 
     void GetHTML(std::ostringstream &stream) override;
     void GetJavaCommandFunction(std::ostringstream &stream) override;
@@ -88,13 +88,13 @@ public:
     void InitializeData(EEPROM_Data data) override;
 };
 
-class Control_ColorPicker : public PageElement
+class Input_ColorPicker : public PageElement
 {
 private:
     uint8_t *m_dataRed, *m_dataGreen, *m_dataBlue;
 
 public:
-    Control_ColorPicker(std::string title, uint8_t *red, uint8_t *green, uint8_t *blue);
+    Input_ColorPicker(std::string title, uint8_t *red, uint8_t *green, uint8_t *blue);
 
     void GetHTML(std::ostringstream &stream) override;
     void GetJavaCommandFunction(std::ostringstream &stream) override;
@@ -104,13 +104,28 @@ public:
     void InitializeData(EEPROM_Data data) override;
 };
 
-class Display_Text : public PageElement
+class Input_Text : public PageElement
 {
 private:
     std::string *m_data;
 
 public:
-    Display_Text(std::string title, std::string *data);
+    Input_Text(std::string title, std::string *data);
+    void GetHTML(std::ostringstream &stream) override;
+    void GetJavaCommandFunction(std::ostringstream &stream) override;
+    void GetJavaOnMessageStatment(std::ostringstream &stream) override;
+    std::string GetSocketMessage() override;
+    bool ProcessSocketMessage(std::string message) override;
+    void InitializeData(EEPROM_Data data) override;
+};
+
+class Output_Text : public PageElement
+{
+private:
+    std::string *m_data;
+
+public:
+    Output_Text(std::string title, std::string *data);
     void GetHTML(std::ostringstream &stream) override;
     void GetJavaCommandFunction(std::ostringstream &stream) override;
     void GetJavaOnMessageStatment(std::ostringstream &stream) override;

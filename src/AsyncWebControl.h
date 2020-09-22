@@ -11,7 +11,6 @@
 
 class AsyncWebControl
 {
-
 private:
     AsyncWebServer *server;
     AsyncWebSocket *socket;
@@ -47,6 +46,13 @@ private:
     void onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
 
 public:
+    std::string color_grey = "#cccccc";
+    std::string color_background = "#ebebeb";
+    std::string color_dark = "#1a5276";
+    std::string color_neutral = "#2471a3";
+    std::string color_light = "#7fb3d5";
+    
+
     AsyncWebControl(std::string title, uint8_t versionNumber = 0);
 
     void BeginServer();
